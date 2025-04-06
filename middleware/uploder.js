@@ -1,9 +1,33 @@
 const multer = require("multer");
 const path = require("path");
+const fs = require("fs");
+
+// Auto-create folders if they don't exist
+const createFolders = () => {
+  const baseDir = 'public/uploads';
+  const imageDir = path.join(baseDir, 'images');
+  const pdfDir = path.join(baseDir, 'pdfs');
+
+  [imageDir, pdfDir].forEach(dir => {
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+  });
+};
+
+createFolders();
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'public/images')
+    const ext = path.extname(file.originalname).toLowerCase();
+
+    if ([".jpg", ".jpeg", ".png", ".webp"].includes(ext)) {
+      cb(null, 'public/uploads/images');
+    } else if (ext === ".pdf") {
+      cb(null, 'public/uploads/pdfs');
+    } else {
+      cb(new Error("Unsupported file type"));
+    }
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E4);
@@ -14,17 +38,17 @@ const storage = multer.diskStorage({
 const uploader = multer({
   storage,
   fileFilter: (req, file, cb) => {
-    const supportedImage = /png|jpg|jpeg|webp/;
-    const extension = path.extname(file.originalname);
+    const allowedExt = [".jpg", ".jpeg", ".png", ".webp", ".pdf"];
+    const ext = path.extname(file.originalname).toLowerCase();
 
-    if (supportedImage.test(extension)) {
+    if (allowedExt.includes(ext)) {
       cb(null, true);
     } else {
-      cb(new Error("Must be a png/jpg/jpeg/webp image"));
+      cb(new Error("Only image and PDF files are allowed"));
     }
   },
   limits: {
-    fileSize: 4000000,
+    fileSize: 10 * 1024 * 1024,
   }
 });
 

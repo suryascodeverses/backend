@@ -4,11 +4,11 @@ const dayjs = require("dayjs");
 const utc = require("dayjs/plugin/utc");
 dayjs.extend(utc);
 
-const Admin = require("../model/Admin"); // Sequelize model
-const { generateToken } = require("../utils/token");
+const { Admin } = require("../models");
 const { sendEmail } = require("../config/email");
 const { secret } = require("../config/secret");
 const { tokenForVerify } = require("../config/auth");
+const { generateToken } = require("../utils/token");
 
 // Register Admin
 const registerAdmin = async (req, res, next) => {
