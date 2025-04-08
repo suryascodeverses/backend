@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../config/db");
 
-const CourseMaterial = sequelize.define(
-  "CourseMaterial",
+const FreeResourceMaterial = sequelize.define(
+  "FreeResourceMaterial",
   {
     id: {
       type: DataTypes.UUID,
@@ -13,23 +13,23 @@ const CourseMaterial = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    description: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
-    // duration: {
-    //   type: DataTypes.STRING,
-    //   allowNull: false,
-    // },
-    fees: {
-      type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
-    },
     media: {
       type: DataTypes.JSON,
       allowNull: false,
     },
-    courseId: {
+    type: {
+      type: DataTypes.ENUM("pdf", "video"),
+      allowNull: false,
+    },
+    categoryId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    categoryTypeId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    freeResourceId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
@@ -39,4 +39,4 @@ const CourseMaterial = sequelize.define(
   }
 );
 
-module.exports = CourseMaterial;
+module.exports = FreeResourceMaterial;

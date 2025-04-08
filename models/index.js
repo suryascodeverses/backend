@@ -3,126 +3,159 @@ const { sequelize } = require("../config/db");
 
 const User = require("./User");
 const Admin = require("./Admin");
-
 const Category = require("./Category");
 const CategoryType = require("./CategoryType");
 const Course = require("./Course");
 const Achievement = require("./Achievement");
 const CareerCounselling = require("./CareerCounselling");
 const FreeResource = require("./FreeResource");
-
 const CourseMaterial = require("./CourseMaterial");
+const CareerCounsellingForm = require("./CareerCounsellingForm");
+const FreeResourceMaterial = require("./FreeResourceMaterials");
 
-// Define associations here AFTER importing all models
-//
-// has many
+// ------------------- Associations ------------------- //
+
+// CategoryType → hasMany → Category
 CategoryType.hasMany(Category, {
-  foreignKey: "categoryId",
-  as: "categories",
+  foreignKey: "categoryTypeId",
+  as: "categoryTypeCategories",
 });
-
-CategoryType.hasMany(Achievement, {
-  foreignKey: "achievementId",
-  as: "achievements",
-});
-
-CategoryType.hasMany(Course, {
-  foreignKey: "courseId",
-  as: "courses",
-});
-
-CategoryType.hasMany(CareerCounselling, {
-  foreignKey: "careerCounsellingId",
-  as: "careerCounsellings",
-});
-
-CategoryType.hasMany(FreeResource, {
-  foreignKey: "freeResourceId",
-  as: "freeResources",
-});
-
-// category has many
-
-Category.hasMany(Category, {
-  foreignKey: "categoryId",
-  as: "categories",
-});
-
-Category.hasMany(Achievement, {
-  foreignKey: "achievementId",
-  as: "achievements",
-});
-
-Category.hasMany(Course, {
-  foreignKey: "courseId",
-  as: "courses",
-});
-
-Category.hasMany(CareerCounselling, {
-  foreignKey: "careerCounsellingId",
-  as: "careerCounsellings",
-});
-
-Category.hasMany(FreeResource, {
-  foreignKey: "freeResourceId",
-  as: "freeResources",
-});
-
-//belongs to
 Category.belongsTo(CategoryType, {
   foreignKey: "categoryTypeId",
   as: "categoryType",
 });
 
-FreeResource.belongsTo(Category, {
-  foreignKey: "categoryId",
-  as: "category",
-});
-
-FreeResource.belongsTo(CategoryType, {
+// CategoryType → hasMany → Achievement
+CategoryType.hasMany(Achievement, {
   foreignKey: "categoryTypeId",
-  as: "categoryType",
+  as: "categoryTypeAchievements",
 });
-
 Achievement.belongsTo(CategoryType, {
   foreignKey: "categoryTypeId",
+  as: "achievementCategoryType",
+});
+
+// CategoryType → hasMany → Course
+CategoryType.hasMany(Course, {
+  foreignKey: "categoryTypeId",
+  as: "categoryTypeCourses",
+});
+Course.belongsTo(CategoryType, {
+  foreignKey: "categoryTypeId",
+  as: "courseCategoryType",
+});
+
+// CategoryType → hasMany → CareerCounselling
+CategoryType.hasMany(CareerCounselling, {
+  foreignKey: "categoryTypeId",
   as: "categoryType",
 });
-
-Achievement.belongsTo(Category, {
-  foreignKey: "categoryId",
-  as: "category",
-});
-
-CareerCounselling.belongsTo(Category, {
-  foreignKey: "categoryId",
-  as: "category",
-});
-
 CareerCounselling.belongsTo(CategoryType, {
   foreignKey: "categoryTypeId",
   as: "categoryType",
 });
 
+// CategoryType → hasMany → FreeResource
+CategoryType.hasMany(FreeResource, {
+  foreignKey: "categoryTypeId",
+  as: "categoryTypeFreeResources",
+});
+FreeResource.belongsTo(CategoryType, {
+  foreignKey: "categoryTypeId",
+  as: "freeResourceCategoryType",
+});
+
+// Category → hasMany → Achievement
+Category.hasMany(Achievement, {
+  foreignKey: "categoryId",
+  as: "categoryAchievements",
+});
+Achievement.belongsTo(Category, {
+  foreignKey: "categoryId",
+  as: "achievementCategory",
+});
+
+// Category → hasMany → Course
+Category.hasMany(Course, {
+  foreignKey: "categoryId",
+  as: "categoryCourses",
+});
 Course.belongsTo(Category, {
+  foreignKey: "categoryId",
+  as: "courseCategory",
+});
+
+// Category → hasMany → CareerCounselling
+Category.hasMany(CareerCounselling, {
+  foreignKey: "categoryId",
+  as: "category",
+});
+CareerCounselling.belongsTo(Category, {
   foreignKey: "categoryId",
   as: "category",
 });
 
-Course.belongsTo(CategoryType, {
-  foreignKey: "categoryTypeId",
-  as: "categoryType",
+// Category → hasMany → FreeResource
+Category.hasMany(FreeResource, {
+  foreignKey: "categoryId",
+  as: "categoryFreeResources",
+});
+FreeResource.belongsTo(Category, {
+  foreignKey: "categoryId",
+  as: "freeResourceCategory",
 });
 
+// Category → hasMany → CareerCounsellingForm
+Category.hasMany(CareerCounsellingForm, {
+  foreignKey: "categoryId",
+  as: "categoryCareerCounsellingForms",
+});
+CareerCounsellingForm.belongsTo(Category, {
+  foreignKey: "categoryId",
+  as: "careerCounsellingFormCategory",
+});
+
+// Course → hasMany → CourseMaterial
 Course.hasMany(CourseMaterial, {
-  foreignKey: "courseMaterialId",
-  as: "courseMaterial",
+  foreignKey: "courseId",
+  as: "courseMaterials",
 });
-
 CourseMaterial.belongsTo(Course, {
   foreignKey: "courseId",
   as: "course",
 });
+
+// const FreeResource = require('./FreeResource');
+// const FreeResourceMaterial = require('./FreeResourceMaterial');
+// const Category = require('./Category');
+// const CategoryType = require('./CategoryType');
+
+// Associations
+FreeResourceMaterial.belongsTo(FreeResource, {
+  foreignKey: "freeResourceId",
+  onDelete: "CASCADE",
+});
+FreeResource.hasMany(FreeResourceMaterial, {
+  foreignKey: "freeResourceId",
+});
+
+FreeResourceMaterial.belongsTo(Category, {
+  foreignKey: "categoryId",
+  onDelete: "CASCADE",
+});
+Category.hasMany(FreeResourceMaterial, {
+  foreignKey: "categoryId",
+});
+
+FreeResourceMaterial.belongsTo(CategoryType, {
+  foreignKey: "categoryTypeId",
+  onDelete: "CASCADE",
+});
+CategoryType.hasMany(FreeResourceMaterial, {
+  foreignKey: "categoryTypeId",
+});
+
+// ------------------- Exports ------------------- //
 
 module.exports = {
   sequelize,
@@ -133,7 +166,9 @@ module.exports = {
   CategoryType,
   Course,
   FreeResource,
+  FreeResourceMaterial,
   Achievement,
   CareerCounselling,
-  CourseMaterial
+  CourseMaterial,
+  CareerCounsellingForm,
 };

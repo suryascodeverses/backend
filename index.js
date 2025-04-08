@@ -50,12 +50,20 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/category-types", require("./routes/categoryType.routes"));
 app.use("/api/categories", require("./routes/category.routes"));
 app.use("/api/courses", require("./routes/course.routes"));
-app.use("/api/resources", require("./routes/resource.routes"));
-app.use("/api/counselling", require("./routes/counselling.routes"));
+app.use("/api/free-resources", require("./routes/resource.routes"));
+app.use("/api/career-counselling", require("./routes/counselling.routes"));
 app.use("/api/achievements", require("./routes/achievement.routes"));
+app.use(
+  "/api/free-resource-materials",
+  require("./routes/resourceMaterial.routes")
+);
+app.use(
+  "/api/career-counselling-form",
+  require("./routes/counsellingForm.routes")
+);
 
 // root route
-app.get("/", (req, res) => res.send("Apps worked successfully"));
+// app.get("/", (req, res) => res.send("Apps worked successfully"));
 app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
 
 // app.get("/test-image", (req, res) => {
@@ -64,6 +72,13 @@ app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
 // console.log("Serving from:", path.join(__dirname, "public/uploads"));
 
 // app.listen(PORT, () => console.log(`server running on port ${PORT}`));
+
+app.use(express.static(path.join(__dirname, "out")));
+
+// Redirect all other requests to index.html (for routing to work)
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "out", "index.html"));
+});
 
 (async () => {
   await connectDB();
