@@ -133,26 +133,34 @@ CourseMaterial.belongsTo(Course, {
 // Associations
 FreeResourceMaterial.belongsTo(FreeResource, {
   foreignKey: "freeResourceId",
+  as: "materialFreeResource",
   onDelete: "CASCADE",
 });
 FreeResource.hasMany(FreeResourceMaterial, {
   foreignKey: "freeResourceId",
+  as: "materialFreeResource",
 });
 
 FreeResourceMaterial.belongsTo(Category, {
   foreignKey: "categoryId",
+  as: "materialCategory",
+
   onDelete: "CASCADE",
 });
 Category.hasMany(FreeResourceMaterial, {
   foreignKey: "categoryId",
+  as: "materialCategory",
 });
 
 FreeResourceMaterial.belongsTo(CategoryType, {
   foreignKey: "categoryTypeId",
+  as: "materialCategoryType",
+
   onDelete: "CASCADE",
 });
 CategoryType.hasMany(FreeResourceMaterial, {
   foreignKey: "categoryTypeId",
+  as: "materialCategoryType",
 });
 
 // ------------------- Exports ------------------- //

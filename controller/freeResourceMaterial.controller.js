@@ -1,4 +1,8 @@
-const { FreeResourceMaterial } = require("../models");
+const {
+  FreeResourceMaterial,
+  FreeResource,
+  CategoryType,
+} = require("../models");
 const path = require("path");
 
 const server_url = process.env.SERVER_URL;
@@ -24,7 +28,9 @@ exports.createFreeResourceMaterial = async (req, res) => {
     let media = {};
     if (type === "pdf") {
       media = {
-        path: `${server_url}/uploads/${req.file.filename}`,
+        path: `${server_url}/uploads${
+          req.file.destination.split("uploads")[1]
+        }/${req.file.filename}`,
         type: "pdf",
       };
     } else if (type === "video") {
@@ -76,7 +82,20 @@ exports.bulkCreateFreeResourceMaterials = async (req, res) => {
 // Get All Free Resource Materials
 exports.getAllFreeResourceMaterials = async (req, res) => {
   try {
-    const materials = await FreeResourceMaterial.findAll();
+    const materials = await FreeResourceMaterial.findAll({
+      include: [
+        {
+          model: FreeResource,
+          as: "materialFreeResource", // Alias used in association
+          attributes: ["id", "title", "type"],
+        },
+        {
+          model: CategoryType,
+          as: "materialCategoryType", // Alias used in association
+          attributes: ["id", "name"],
+        },
+      ],
+    });
     res.status(200).json({ success: true, data: materials });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -123,7 +142,9 @@ exports.updateFreeResourceMaterial = async (req, res) => {
     let media = {};
     if (type === "pdf") {
       media = {
-        path: `${server_url}/uploads/${req.file.filename}`,
+        path: `${server_url}/uploads${
+          req.file.destination.split("uploads")[1]
+        }/${req.file.filename}`,
         type: "pdf",
       };
     } else if (type === "video") {

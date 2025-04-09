@@ -7,14 +7,21 @@ exports.createCounselling = async (req, res) => {
     const { title, description, price, categoryId, categoryTypeId } = req.body;
 
     if (!title || !price || !categoryId || !categoryTypeId || !req.file) {
-      return res.status(400).json({ success: false, message: "All required fields must be filled and media must be uploaded." });
+      return res
+        .status(400)
+        .json({
+          success: false,
+          message:
+            "All required fields must be filled and media must be uploaded.",
+        });
     }
 
     const media = {
-      path: `${server_url}/uploads/${req.file.filename}`,
+      path: `${server_url}/uploads${req.file.destination.split("uploads")[1]}/${
+        req.file.filename
+      }`,
       type: "image",
     };
-
     const created = await CareerCounselling.create({
       title,
       description,
@@ -59,7 +66,12 @@ exports.getCounsellingById = async (req, res) => {
   try {
     const data = await CareerCounselling.findByPk(req.params.id);
     if (!data) {
-      return res.status(404).json({ success: false, message: "Career counselling record not found." });
+      return res
+        .status(404)
+        .json({
+          success: false,
+          message: "Career counselling record not found.",
+        });
     }
     res.status(200).json({ success: true, data });
   } catch (error) {
@@ -73,18 +85,30 @@ exports.updateCounselling = async (req, res) => {
     const { title, description, price, categoryId, categoryTypeId } = req.body;
     const item = await CareerCounselling.findByPk(req.params.id);
     if (!item) {
-      return res.status(404).json({ success: false, message: "Career counselling not found." });
+      return res
+        .status(404)
+        .json({ success: false, message: "Career counselling not found." });
     }
 
     let media = item.media;
+
     if (req.file) {
       media = {
-        path: `${server_url}/uploads/${req.file.filename}`,
+        path: `${server_url}/uploads${
+          req.file.destination.split("uploads")[1]
+        }/${req.file.filename}`,
         type: "image",
       };
     }
 
-    await item.update({ title, description, price, categoryId, categoryTypeId, media });
+    await item.update({
+      title,
+      description,
+      price,
+      categoryId,
+      categoryTypeId,
+      media,
+    });
 
     res.status(200).json({ success: true, data: item });
   } catch (error) {
@@ -97,11 +121,15 @@ exports.deleteCounselling = async (req, res) => {
   try {
     const item = await CareerCounselling.findByPk(req.params.id);
     if (!item) {
-      return res.status(404).json({ success: false, message: "Career counselling not found." });
+      return res
+        .status(404)
+        .json({ success: false, message: "Career counselling not found." });
     }
 
     await item.destroy();
-    res.status(200).json({ success: true, message: "Career counselling deleted." });
+    res
+      .status(200)
+      .json({ success: true, message: "Career counselling deleted." });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
