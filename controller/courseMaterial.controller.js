@@ -7,7 +7,8 @@ const server_url = process.env.SERVER_URL;
 // Create Course Material
 exports.createCourseMaterial = async (req, res) => {
   try {
-    const { title, description, duration, fees, courseId } = req.body;
+    const { title, description, duration, fees, courseId, categoryId } =
+      req.body;
 
     if (!req.file) {
       return res
@@ -15,7 +16,7 @@ exports.createCourseMaterial = async (req, res) => {
         .json({ success: false, message: "Media file is required" });
     }
 
-    const filePath = `${server_url}/uploads/${
+    const filePath = `${server_url}/uploads${
       req.file.destination.split("uploads")[1]
     }/${req.file.filename}`;
     const media = {
@@ -31,6 +32,7 @@ exports.createCourseMaterial = async (req, res) => {
       fees,
       media,
       courseId,
+      categoryId,
     });
 
     res.status(201).json({ success: true, data: material });
@@ -73,11 +75,11 @@ exports.getCourseMaterialById = async (req, res) => {
 // Update Course Material
 exports.updateCourseMaterial = async (req, res) => {
   try {
-    const { title, description, duration, fees, courseId } = req.body;
+    const { title, description, duration, fees, courseId,categoryId } = req.body;
 
     let media = null;
     if (req.file) {
-      const filePath = `${server_url}/uploads/${
+      const filePath = `${server_url}/uploads${
         req.file.destination.split("uploads")[1]
       }/${req.file.filename}`;
       media = {
@@ -88,7 +90,15 @@ exports.updateCourseMaterial = async (req, res) => {
     }
 
     const [updated] = await CourseMaterial.update(
-      { title, description, duration, fees, courseId, ...(media && { media }) },
+      {
+        title,
+        description,
+        duration,
+        fees,
+        categoryId,
+        courseId,
+        ...(media && { media }),
+      },
       { where: { id: req.params.id } }
     );
 

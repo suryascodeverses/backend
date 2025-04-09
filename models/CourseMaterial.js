@@ -33,6 +33,10 @@ const CourseMaterial = sequelize.define(
       type: DataTypes.UUID,
       allowNull: false,
     },
+    categoryId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
   },
   {
     timestamps: true,

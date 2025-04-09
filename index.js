@@ -35,6 +35,9 @@ app.use(express.static(path.join(__dirname, "public")));
 // connect database
 connectDB();
 
+app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
+
+
 app.use("/api/user", userRoutes);
 // app.use("/api/category", categoryRoutes);
 // app.use("/api/brand", brandRoutes);
@@ -50,6 +53,7 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/category-types", require("./routes/categoryType.routes"));
 app.use("/api/categories", require("./routes/category.routes"));
 app.use("/api/courses", require("./routes/course.routes"));
+app.use("/api/courses-material", require("./routes/courseMaterial.routes"));
 app.use("/api/free-resources", require("./routes/resource.routes"));
 app.use("/api/career-counselling", require("./routes/counselling.routes"));
 app.use("/api/achievements", require("./routes/achievement.routes"));
@@ -64,7 +68,7 @@ app.use(
 
 // root route
 // app.get("/", (req, res) => res.send("Apps worked successfully"));
-app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
+// app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
 
 // app.get("/test-image", (req, res) => {
 //   res.sendFile(path.join(__dirname, "public/uploads/images/1743961088770-3974-daniele-levis-pelusi-jTknOGI18us-unsplash.jpg"));

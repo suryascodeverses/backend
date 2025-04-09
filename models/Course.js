@@ -22,10 +22,7 @@ const Course = sequelize.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    categoryId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-    },
+    
     categoryTypeId: {
       type: DataTypes.UUID,
       allowNull: true,

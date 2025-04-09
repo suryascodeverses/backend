@@ -38,7 +38,7 @@ Achievement.belongsTo(CategoryType, {
 // CategoryType → hasMany → Course
 CategoryType.hasMany(Course, {
   foreignKey: "categoryTypeId",
-  as: "categoryTypeCourses",
+  as: "courseCategoryType",
 });
 Course.belongsTo(CategoryType, {
   foreignKey: "categoryTypeId",
@@ -76,13 +76,13 @@ Achievement.belongsTo(Category, {
 });
 
 // Category → hasMany → Course
-Category.hasMany(Course, {
+Category.hasMany(CourseMaterial, {
   foreignKey: "categoryId",
-  as: "categoryCourses",
+  as: "courseMaterialCategory",
 });
-Course.belongsTo(Category, {
+CourseMaterial.belongsTo(Category, {
   foreignKey: "categoryId",
-  as: "courseCategory",
+  as: "courseMaterialCategory",
 });
 
 // Category → hasMany → CareerCounselling

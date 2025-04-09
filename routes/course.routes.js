@@ -12,20 +12,20 @@ router.get("/:id", courseController.getCourseById);
 router.put("/add/:id", courseController.updateCourse);
 router.delete("/:id", courseController.deleteCourse);
 
-// Course Material routes (with media)
-router.post(
-  "/material/add",
-  uploader.single("media"),
-  courseMaterialController.createCourseMaterial
-);
-router.get("/material/courseId/:courseId", courseMaterialController.getAllCourseMaterialsByCourse);
-router.get("/material", courseMaterialController.getAllCourseMaterials);
-router.get("/material/:id", courseMaterialController.getCourseMaterialById);
-router.put(
-  "/material/:id",
-  uploader.single("media"),
-  courseMaterialController.updateCourseMaterial
-);
-router.delete("/material/:id", courseMaterialController.deleteCourseMaterial);
+// // Course Material routes (with media)
+// router.post(
+//   "/material/add",
+//   uploader.single("media"),
+//   courseMaterialController.createCourseMaterial
+// );
+// router.get("/material/courseId/:courseId", courseMaterialController.getAllCourseMaterialsByCourse);
+// router.get("/material", courseMaterialController.getAllCourseMaterials);
+// router.get("/material/:id", courseMaterialController.getCourseMaterialById);
+// router.put(
+//   "/material/:id",
+//   uploader.single("media"),
+//   courseMaterialController.updateCourseMaterial
+// );
+// router.delete("/material/:id", courseMaterialController.deleteCourseMaterial);
 
 module.exports = router;
