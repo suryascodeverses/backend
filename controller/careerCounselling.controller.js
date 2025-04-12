@@ -7,16 +7,15 @@ exports.createCounselling = async (req, res) => {
     const { title, description, price, categoryId, categoryTypeId } = req.body;
 
     if (!title || !price || !categoryId || !categoryTypeId || !req.file) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message:
-            "All required fields must be filled and media must be uploaded.",
-        });
+      return res.status(400).json({
+        success: false,
+        message:
+          "All required fields must be filled and media must be uploaded.",
+      });
     }
 
     const media = {
+      name: req.file.originalname,
       path: `${server_url}/uploads${req.file.destination.split("uploads")[1]}/${
         req.file.filename
       }`,
@@ -66,12 +65,10 @@ exports.getCounsellingById = async (req, res) => {
   try {
     const data = await CareerCounselling.findByPk(req.params.id);
     if (!data) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          message: "Career counselling record not found.",
-        });
+      return res.status(404).json({
+        success: false,
+        message: "Career counselling record not found.",
+      });
     }
     res.status(200).json({ success: true, data });
   } catch (error) {
@@ -94,6 +91,7 @@ exports.updateCounselling = async (req, res) => {
 
     if (req.file) {
       media = {
+        name: req.file.originalname,
         path: `${server_url}/uploads${
           req.file.destination.split("uploads")[1]
         }/${req.file.filename}`,

@@ -28,6 +28,7 @@ exports.createFreeResourceMaterial = async (req, res) => {
     let media = {};
     if (type === "pdf") {
       media = {
+        name: req.file.originalname,
         path: `${server_url}/uploads${
           req.file.destination.split("uploads")[1]
         }/${req.file.filename}`,
@@ -41,6 +42,7 @@ exports.createFreeResourceMaterial = async (req, res) => {
         });
       }
       media = {
+        name: "video",
         path: url,
         type: "video",
       };
@@ -142,6 +144,7 @@ exports.updateFreeResourceMaterial = async (req, res) => {
     let media = {};
     if (type === "pdf") {
       media = {
+        name: req.file.originalname,
         path: `${server_url}/uploads${
           req.file.destination.split("uploads")[1]
         }/${req.file.filename}`,
@@ -155,6 +158,7 @@ exports.updateFreeResourceMaterial = async (req, res) => {
         });
       }
       media = {
+        name: "video",
         path: url,
         type: "video",
       };

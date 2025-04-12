@@ -23,7 +23,7 @@ const userRoutes = require("./routes/user.routes");
 // const couponRoutes = require("./routes/coupon.routes");
 // const reviewRoutes = require("./routes/review.routes");
 const adminRoutes = require("./routes/admin.routes");
-// // const uploadRouter = require('./routes/uploadFile.route');
+const uploadRouter = require('./routes/uploadFile.routes');
 // const cloudinaryRoutes = require("./routes/cloudinary.routes");
 
 // middleware
@@ -42,7 +42,7 @@ app.use("/api/user", userRoutes);
 // app.use("/api/category", categoryRoutes);
 // app.use("/api/brand", brandRoutes);
 // app.use("/api/product", productRoutes);
-// // app.use('/api/upload',uploadRouter);
+app.use('/api/upload',uploadRouter);
 // app.use("/api/order", orderRoutes);
 // app.use("/api/coupon", couponRoutes);
 // app.use("/api/user-order", userOrderRoutes);
