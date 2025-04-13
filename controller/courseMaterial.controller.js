@@ -1,6 +1,7 @@
 // controllers/courseMaterialController.js
 const { CourseMaterial } = require("../models");
 const path = require("path");
+const { Op } = require('sequelize');
 
 const server_url = process.env.SERVER_URL;
 
@@ -50,15 +51,35 @@ exports.getAllCourseMaterials = async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 };
+
 exports.getAllCourseMaterialsByCourse = async (req, res) => {
   try {
     const { courseId } = req.params;
-    const materials = await CourseMaterial.findAll({ where: { courseId } });
+    const { search, categoryId } = req.query;
+
+    const whereClause = {
+      courseId,
+    };
+
+    // Handle search filter (on 'title' — change as needed)
+    if (search) {
+      whereClause.title = { [Op.like]: `%${search}%` }; // Use Op.like for MySQL
+    }
+
+    // Handle multiple categoryId filters (OR condition)
+    if (categoryId) {
+      const categoryIds = Array.isArray(categoryId) ? categoryId : [categoryId];
+      whereClause.categoryId = { [Op.in]: categoryIds };
+    }
+
+    const materials = await CourseMaterial.findAll({ where: whereClause });
+
     res.status(200).json({ success: true, data: materials });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
 };
+
 
 // Get Course Material by ID
 exports.getCourseMaterialById = async (req, res) => {

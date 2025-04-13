@@ -1,4 +1,4 @@
-const { CategoryType } = require("../models");
+const { CategoryType, Course, FreeResource } = require("../models");
 const { Category } = require("../models");
 
 exports.createCategory = async (req, res) => {
@@ -45,6 +45,34 @@ exports.getAllCategories = async (req, res) => {
 exports.getCategoryById = async (req, res) => {
   try {
     const category = await Category.findByPk(req.params.id);
+    if (!category)
+      return res.status(404).json({ success: false, message: "Not found" });
+    res.status(200).json({ success: true, data: category });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+exports.getCategoryByResource = async (req, res) => {
+  try {
+    const { resourceId } = req.params;
+    const resource = await FreeResource.findByPk(resourceId);
+    const category = await Category.findAll({
+      where: { categoryTypeId: resource.categoryTypeId },
+    });
+    if (!category)
+      return res.status(404).json({ success: false, message: "Not found" });
+    res.status(200).json({ success: true, data: category });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+exports.getCategoryByCourse = async (req, res) => {
+  try {
+    const { courseId } = req.params;
+    const course = await Course.findByPk(courseId);
+    const category = await Category.findAll({
+      where: { categoryTypeId: course.categoryTypeId },
+    });
     if (!category)
       return res.status(404).json({ success: false, message: "Not found" });
     res.status(200).json({ success: true, data: category });

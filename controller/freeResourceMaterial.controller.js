@@ -104,13 +104,42 @@ exports.getAllFreeResourceMaterials = async (req, res) => {
   }
 };
 
-// Get Free Resource Materials by Free Resource ID
+const { Op } = require('sequelize');
+
 exports.getFreeResourceMaterialsByResource = async (req, res) => {
   try {
     const { freeResourceId } = req.params;
+    const { categoryId, search } = req.query;
+
+    const whereClause = {
+      freeResourceId,
+    };
+
+    if (search) {
+      whereClause.title = { [Op.like]: `%${search}%` }; // Use Op.like for MySQL
+    }
+
+    if (categoryId) {
+      const categoryIds = Array.isArray(categoryId) ? categoryId : [categoryId];
+      whereClause.categoryId = { [Op.in]: categoryIds };
+    }
+
     const materials = await FreeResourceMaterial.findAll({
-      where: { freeResourceId },
+      where: whereClause,
+      include: [
+        {
+          model: FreeResource,
+          as: "materialFreeResource",
+          attributes: ["id", "title", "type"],
+        },
+        {
+          model: CategoryType,
+          as: "materialCategoryType",
+          attributes: ["id", "name"],
+        },
+      ],
     });
+
     res.status(200).json({ success: true, data: materials });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });

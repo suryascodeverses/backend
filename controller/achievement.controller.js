@@ -1,5 +1,6 @@
 const { Achievement } = require("../models");
 const server_url = process.env.SERVER_URL || "http://localhost:5000";
+const { Op } = require('sequelize');
 
 // Create
 exports.createAchievement = async (req, res) => {
@@ -50,11 +51,30 @@ exports.createAchievement = async (req, res) => {
 };
 
 // Get All
+
 exports.getAllAchievements = async (req, res) => {
   try {
+    const { search, type, year } = req.query;
+
+    const whereClause = {};
+
+    if (search) {
+      whereClause.title = { [Op.like]: `%${search}%` }; // Use Op.like for MySQL
+    }
+
+    if (type) {
+      whereClause.type = type;
+    }
+
+    if (year) {
+      whereClause.year = year;
+    }
+
     const achievements = await Achievement.findAll({
+      where: whereClause,
       order: [["createdAt", "DESC"]],
     });
+
     res.status(200).json({ success: true, data: achievements });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
