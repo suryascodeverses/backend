@@ -32,6 +32,8 @@ const CareerCounselling = sequelize.define(
         model: Category,
         key: "id",
       },
+      allowNull: false,
+
     },
     categoryTypeId: {
       type: DataTypes.UUID,
@@ -39,6 +41,8 @@ const CareerCounselling = sequelize.define(
         model: CategoryType,
         key: "id",
       },
+      allowNull: false,
+
     },
   },
   {

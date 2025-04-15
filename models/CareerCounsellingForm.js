@@ -42,6 +42,8 @@ const CareerCounsellingForm = sequelize.define(
         model: Category,
         key: "id",
       },
+      allowNull: true,
+
     },
   },
   {

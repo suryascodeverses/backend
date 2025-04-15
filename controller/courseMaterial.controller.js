@@ -1,7 +1,7 @@
 // controllers/courseMaterialController.js
-const { CourseMaterial } = require("../models");
+const { CourseMaterial, Category, Course } = require("../models");
 const path = require("path");
-const { Op } = require('sequelize');
+const { Op } = require("sequelize");
 
 const server_url = process.env.SERVER_URL;
 
@@ -45,7 +45,20 @@ exports.createCourseMaterial = async (req, res) => {
 // Get All Course Materials
 exports.getAllCourseMaterials = async (req, res) => {
   try {
-    const materials = await CourseMaterial.findAll();
+    const materials = await CourseMaterial.findAll({
+      include: [
+        {
+          model: Category,
+          as: "courseMaterialCategory", // must match the alias used in association
+          attributes: ["id", "name"], // include only what you need
+        },
+        {
+          model: Course,
+          as: "courseMaterialCourse", // must match the alias used in association
+          attributes: ["id", "title"], // include only what you need
+        },
+      ],
+    });
     res.status(200).json({ success: true, data: materials });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -72,7 +85,21 @@ exports.getAllCourseMaterialsByCourse = async (req, res) => {
       whereClause.categoryId = { [Op.in]: categoryIds };
     }
 
-    const materials = await CourseMaterial.findAll({ where: whereClause });
+    const materials = await CourseMaterial.findAll({
+      where: whereClause,
+      include: [
+        {
+          model: Category,
+          as: "courseMaterialCategory", // must match the alias used in association
+          attributes: ["id", "name"], // include only what you need
+        },
+        {
+          model: Course,
+          as: "courseMaterialCourse", // must match the alias used in association
+          attributes: ["id", "title"], // include only what you need
+        },
+      ],
+    });
 
     res.status(200).json({ success: true, data: materials });
   } catch (err) {
@@ -80,11 +107,23 @@ exports.getAllCourseMaterialsByCourse = async (req, res) => {
   }
 };
 
-
 // Get Course Material by ID
 exports.getCourseMaterialById = async (req, res) => {
   try {
-    const material = await CourseMaterial.findByPk(req.params.id);
+    const material = await CourseMaterial.findByPk(req.params.id, {
+      include: [
+        {
+          model: Category,
+          as: "courseMaterialCategory", // must match the alias used in association
+          attributes: ["id", "name"], // include only what you need
+        },
+        {
+          model: Course,
+          as: "courseMaterialCourse", // must match the alias used in association
+          attributes: ["id", "title"], // include only what you need
+        },
+      ],
+    });
     if (!material)
       return res.status(404).json({ success: false, message: "Not found" });
     res.status(200).json({ success: true, data: material });
@@ -96,7 +135,8 @@ exports.getCourseMaterialById = async (req, res) => {
 // Update Course Material
 exports.updateCourseMaterial = async (req, res) => {
   try {
-    const { title, description, duration, fees, courseId,categoryId } = req.body;
+    const { title, description, duration, fees, courseId, categoryId } =
+      req.body;
 
     let media = null;
     if (req.file) {

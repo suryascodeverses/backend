@@ -4,8 +4,9 @@ const router = express.Router();
 const categoryController = require("../controller/category.controller");
 
 // get
-router.get("/category-by-free-resource/:resourceId", categoryController.getCategoryByResource);
-router.get("/category-by-course/:courseId", categoryController.getCategoryByCourse);
+router.get("/free-resource-categories", categoryController.getResourceCategories);
+router.get("/course-categories", categoryController.getCourseCategories);
+router.get("/counselling-categories", categoryController.getCounsellingCategories);
 router.get("/category-by-type/:categoryTypeId", categoryController.getCategoryByType);
 router.get("/get/:id", categoryController.getCategoryById);
 // add

@@ -1,5 +1,6 @@
 const { CategoryType, Course, FreeResource } = require("../models");
 const { Category } = require("../models");
+const categoryTypeIds = require("../utils/categoryTypeIds");
 
 exports.createCategory = async (req, res) => {
   try {
@@ -32,7 +33,7 @@ exports.getAllCategories = async (req, res) => {
     const categories = await Category.findAll({
       include: {
         model: CategoryType,
-        as: "categoryType", // must match the alias used in association
+        as: "categoryCategoryType", // must match the alias used in association
         attributes: ["id", "name"], // include only what you need
       },
     });
@@ -44,7 +45,13 @@ exports.getAllCategories = async (req, res) => {
 
 exports.getCategoryById = async (req, res) => {
   try {
-    const category = await Category.findByPk(req.params.id);
+    const category = await Category.findByPk(req.params.id, {
+      include: {
+        model: CategoryType,
+        as: "categoryCategoryType", // must match the alias used in association
+        attributes: ["id", "name"], // include only what you need
+      },
+    });
     if (!category)
       return res.status(404).json({ success: false, message: "Not found" });
     res.status(200).json({ success: true, data: category });
@@ -58,6 +65,68 @@ exports.getCategoryByResource = async (req, res) => {
     const resource = await FreeResource.findByPk(resourceId);
     const category = await Category.findAll({
       where: { categoryTypeId: resource.categoryTypeId },
+      include: {
+        model: CategoryType,
+        as: "categoryCategoryType", // must match the alias used in association
+        attributes: ["id", "name"], // include only what you need
+      },
+    });
+    if (!category)
+      return res.status(404).json({ success: false, message: "Not found" });
+    res.status(200).json({ success: true, data: category });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+exports.getResourceCategories = async (req, res) => {
+  try {
+    // const { courseId } = req.params;
+    // const course = await Course.findByPk(courseId);
+    const category = await Category.findAll({
+      where: { categoryTypeId: categoryTypeIds.FreeResources },
+      include: {
+        model: CategoryType,
+        as: "categoryCategoryType", // must match the alias used in association
+        attributes: ["id", "name"], // include only what you need
+      },
+    });
+    if (!category)
+      return res.status(404).json({ success: false, message: "Not found" });
+    res.status(200).json({ success: true, data: category });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+exports.getCourseCategories = async (req, res) => {
+  try {
+    // const { courseId } = req.params;
+    // const course = await Course.findByPk(courseId);
+    const category = await Category.findAll({
+      where: { categoryTypeId: categoryTypeIds.Course },
+      include: {
+        model: CategoryType,
+        as: "categoryCategoryType", // must match the alias used in association
+        attributes: ["id", "name"], // include only what you need
+      },
+    });
+    if (!category)
+      return res.status(404).json({ success: false, message: "Not found" });
+    res.status(200).json({ success: true, data: category });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+exports.getCounsellingCategories = async (req, res) => {
+  try {
+    // const { courseId } = req.params;
+    // const course = await Course.findByPk(courseId);
+    const category = await Category.findAll({
+      where: { categoryTypeId: categoryTypeIds.Counselling },
+      include: {
+        model: CategoryType,
+        as: "categoryCategoryType", // must match the alias used in association
+        attributes: ["id", "name"], // include only what you need
+      },
     });
     if (!category)
       return res.status(404).json({ success: false, message: "Not found" });
@@ -83,7 +152,14 @@ exports.getCategoryByCourse = async (req, res) => {
 exports.getCategoryByType = async (req, res) => {
   try {
     const { categoryTypeId } = req.params;
-    const category = await Category.findAll({ where: { categoryTypeId } });
+    const category = await Category.findAll({
+      where: { categoryTypeId },
+      include: {
+        model: CategoryType,
+        as: "categoryCategoryType", // must match the alias used in association
+        attributes: ["id", "name"], // include only what you need
+      },
+    });
     if (!category)
       return res.status(404).json({ success: false, message: "Not found" });
     res.status(200).json({ success: true, data: category });

@@ -2,6 +2,7 @@ const {
   FreeResourceMaterial,
   FreeResource,
   CategoryType,
+  Category,
 } = require("../models");
 const path = require("path");
 
@@ -93,7 +94,12 @@ exports.getAllFreeResourceMaterials = async (req, res) => {
         },
         {
           model: CategoryType,
-          as: "materialCategoryType", // Alias used in association
+          as: "freeResourceMaterialCategoryType", // Alias used in association
+          attributes: ["id", "name"],
+        },
+        {
+          model: Category,
+          as: "freeResourceMaterialCategory", // Alias used in association
           attributes: ["id", "name"],
         },
       ],
@@ -104,7 +110,7 @@ exports.getAllFreeResourceMaterials = async (req, res) => {
   }
 };
 
-const { Op } = require('sequelize');
+const { Op } = require("sequelize");
 
 exports.getFreeResourceMaterialsByResource = async (req, res) => {
   try {
@@ -129,12 +135,17 @@ exports.getFreeResourceMaterialsByResource = async (req, res) => {
       include: [
         {
           model: FreeResource,
-          as: "materialFreeResource",
+          as: "materialFreeResource", // Alias used in association
           attributes: ["id", "title", "type"],
         },
         {
           model: CategoryType,
-          as: "materialCategoryType",
+          as: "freeResourceMaterialCategoryType", // Alias used in association
+          attributes: ["id", "name"],
+        },
+        {
+          model: Category,
+          as: "freeResourceMaterialCategory", // Alias used in association
           attributes: ["id", "name"],
         },
       ],
@@ -149,7 +160,25 @@ exports.getFreeResourceMaterialsByResource = async (req, res) => {
 // Get Free Resource Material by ID
 exports.getFreeResourceMaterialById = async (req, res) => {
   try {
-    const material = await FreeResourceMaterial.findByPk(req.params.id);
+    const material = await FreeResourceMaterial.findByPk(req.params.id, {
+      include: [
+        {
+          model: FreeResource,
+          as: "materialFreeResource", // Alias used in association
+          attributes: ["id", "title", "type"],
+        },
+        {
+          model: CategoryType,
+          as: "freeResourceMaterialCategoryType", // Alias used in association
+          attributes: ["id", "name"],
+        },
+        {
+          model: Category,
+          as: "freeResourceMaterialCategory", // Alias used in association
+          attributes: ["id", "name"],
+        },
+      ],
+    });
     if (!material)
       return res.status(404).json({ success: false, message: "Not found" });
     res.status(200).json({ success: true, data: material });

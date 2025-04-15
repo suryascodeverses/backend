@@ -34,7 +34,7 @@ exports.getAllForms = async (req, res) => {
     const forms = await CareerCounsellingForm.findAll({
       include: {
         model: Category,
-        as: "category",
+        as: "careerCounsellingFormCategory",
         attributes: ["id", "name"],
       },
       order: [["createdAt", "DESC"]],
@@ -55,7 +55,7 @@ exports.getCareerCounsellingFormById = async (req, res) => {
     const form = await CareerCounsellingForm.findByPk(id, {
       include: {
         model: Category,
-        as: "category",
+        as: "careerCounsellingFormCategory",
         attributes: ["id", "name"],
       },
     });

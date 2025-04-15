@@ -12,6 +12,7 @@ router.post(
 
 // GET - All achievements
 router.get("/", achievementController.getAllAchievements);
+router.get('/achievement-years', achievementController.getAchievementYears);
 
 // GET - Single achievement by ID
 router.get("/:id", achievementController.getAchievementById);

@@ -1,6 +1,6 @@
 const { Achievement } = require("../models");
 const server_url = process.env.SERVER_URL || "http://localhost:5000";
-const { Op } = require('sequelize');
+const { Op } = require("sequelize");
 
 // Create
 exports.createAchievement = async (req, res) => {
@@ -93,6 +93,24 @@ exports.getAchievementById = async (req, res) => {
     res.status(200).json({ success: true, data: achievement });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.getAchievementYears = async (req, res) => {
+  try {
+    const years = await Achievement.findAll({
+      attributes: ["year"],
+      group: ["year"],
+      order: [["year", "DESC"]], // Optional: sort years in descending order
+      raw: true,
+    });
+
+    const distinctYears = years.map((item) => item.year);
+
+    res.status(200).json({ success: true, data: distinctYears });
+  } catch (error) {
+    console.error("Error fetching achievement years:", error);
+    res.status(500).json({ success: false, message: "Server Error" });
   }
 };
 

@@ -44,12 +44,12 @@ exports.getAllCounselling = async (req, res) => {
       include: [
         {
           model: Category,
-          as: "category", // Alias used in association
+          as: "careerCounsellingCategory", // Alias used in association
           attributes: ["id", "name"],
         },
         {
           model: CategoryType,
-          as: "categoryType", // Alias used in association
+          as: "careerCounsellingCategoryType", // Alias used in association
           attributes: ["id", "name"],
         },
       ],
@@ -63,7 +63,20 @@ exports.getAllCounselling = async (req, res) => {
 // Get One
 exports.getCounsellingById = async (req, res) => {
   try {
-    const data = await CareerCounselling.findByPk(req.params.id);
+    const data = await CareerCounselling.findByPk(req.params.id, {
+      include: [
+        {
+          model: Category,
+          as: "careerCounsellingCategory", // Alias used in association
+          attributes: ["id", "name"],
+        },
+        {
+          model: CategoryType,
+          as: "careerCounsellingCategoryType", // Alias used in association
+          attributes: ["id", "name"],
+        },
+      ],
+    });
     if (!data) {
       return res.status(404).json({
         success: false,

@@ -1,4 +1,4 @@
-const { Course } = require("../models");
+const { Course, CategoryType } = require("../models");
 
 exports.createCourse = async (req, res) => {
   try {
@@ -30,7 +30,13 @@ exports.bulkCreateCourses = async (req, res) => {
 
 exports.getCourses = async (req, res) => {
   try {
-    const courses = await Course.findAll();
+    const courses = await Course.findAll({
+      include: {
+        model: CategoryType,
+        as: "courseCategoryType", // must match the alias used in association
+        attributes: ["id", "name"], // include only what you need
+      },
+    });
     res.status(200).json({ success: true, data: courses });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -39,7 +45,13 @@ exports.getCourses = async (req, res) => {
 
 exports.getCourseById = async (req, res) => {
   try {
-    const course = await Course.findByPk(req.params.id);
+    const course = await Course.findByPk(req.params.id, {
+      include: {
+        model: CategoryType,
+        as: "courseCategoryType", // must match the alias used in association
+        attributes: ["id", "name"], // include only what you need
+      },
+    });
     if (!course) {
       return res
         .status(404)

@@ -1,5 +1,7 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../config/db");
+const Category = require("./Category");
+const Course = require("./Course");
 
 const CourseMaterial = sequelize.define(
   "CourseMaterial",
@@ -32,10 +34,18 @@ const CourseMaterial = sequelize.define(
     courseId: {
       type: DataTypes.UUID,
       allowNull: false,
+      references: {
+        model: Course,
+        key: 'id'
+      }
     },
     categoryId: {
       type: DataTypes.UUID,
       allowNull: false,
+      references: {
+        model: Category,
+        key: 'id'
+      }
     },
   },
   {

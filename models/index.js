@@ -15,17 +15,17 @@ const FreeResourceMaterial = require("./FreeResourceMaterials");
 
 // ------------------- Associations ------------------- //
 
-// CategoryType → hasMany → Category
+// -------- CategoryType Associations -------- //
+
 CategoryType.hasMany(Category, {
   foreignKey: "categoryTypeId",
   as: "categoryTypeCategories",
 });
 Category.belongsTo(CategoryType, {
   foreignKey: "categoryTypeId",
-  as: "categoryType",
+  as: "categoryCategoryType",
 });
 
-// CategoryType → hasMany → Achievement
 CategoryType.hasMany(Achievement, {
   foreignKey: "categoryTypeId",
   as: "categoryTypeAchievements",
@@ -35,27 +35,24 @@ Achievement.belongsTo(CategoryType, {
   as: "achievementCategoryType",
 });
 
-// CategoryType → hasMany → Course
 CategoryType.hasMany(Course, {
   foreignKey: "categoryTypeId",
-  as: "courseCategoryType",
+  as: "categoryTypeCourses",
 });
 Course.belongsTo(CategoryType, {
   foreignKey: "categoryTypeId",
   as: "courseCategoryType",
 });
 
-// CategoryType → hasMany → CareerCounselling
 CategoryType.hasMany(CareerCounselling, {
   foreignKey: "categoryTypeId",
-  as: "categoryType",
+  as: "categoryTypeCareerCounsellings",
 });
 CareerCounselling.belongsTo(CategoryType, {
   foreignKey: "categoryTypeId",
-  as: "categoryType",
+  as: "careerCounsellingCategoryType",
 });
 
-// CategoryType → hasMany → FreeResource
 CategoryType.hasMany(FreeResource, {
   foreignKey: "categoryTypeId",
   as: "categoryTypeFreeResources",
@@ -65,7 +62,17 @@ FreeResource.belongsTo(CategoryType, {
   as: "freeResourceCategoryType",
 });
 
-// Category → hasMany → Achievement
+CategoryType.hasMany(FreeResourceMaterial, {
+  foreignKey: "categoryTypeId",
+  as: "categoryTypeFreeResourceMaterials",
+});
+FreeResourceMaterial.belongsTo(CategoryType, {
+  foreignKey: "categoryTypeId",
+  as: "freeResourceMaterialCategoryType",
+});
+
+// -------- Category Associations -------- //
+
 Category.hasMany(Achievement, {
   foreignKey: "categoryId",
   as: "categoryAchievements",
@@ -75,27 +82,24 @@ Achievement.belongsTo(Category, {
   as: "achievementCategory",
 });
 
-// Category → hasMany → Course
 Category.hasMany(CourseMaterial, {
   foreignKey: "categoryId",
-  as: "courseMaterialCategory",
+  as: "categoryCourseMaterials",
 });
 CourseMaterial.belongsTo(Category, {
   foreignKey: "categoryId",
   as: "courseMaterialCategory",
 });
 
-// Category → hasMany → CareerCounselling
 Category.hasMany(CareerCounselling, {
   foreignKey: "categoryId",
-  as: "category",
+  as: "categoryCareerCounsellings",
 });
 CareerCounselling.belongsTo(Category, {
   foreignKey: "categoryId",
-  as: "category",
+  as: "careerCounsellingCategory",
 });
 
-// Category → hasMany → FreeResource
 Category.hasMany(FreeResource, {
   foreignKey: "categoryId",
   as: "categoryFreeResources",
@@ -105,7 +109,6 @@ FreeResource.belongsTo(Category, {
   as: "freeResourceCategory",
 });
 
-// Category → hasMany → CareerCounsellingForm
 Category.hasMany(CareerCounsellingForm, {
   foreignKey: "categoryId",
   as: "categoryCareerCounsellingForms",
@@ -115,52 +118,35 @@ CareerCounsellingForm.belongsTo(Category, {
   as: "careerCounsellingFormCategory",
 });
 
-// Course → hasMany → CourseMaterial
+Category.hasMany(FreeResourceMaterial, {
+  foreignKey: "categoryId",
+  as: "categoryFreeResourceMaterials",
+});
+FreeResourceMaterial.belongsTo(Category, {
+  foreignKey: "categoryId",
+  as: "freeResourceMaterialCategory",
+});
+
+// -------- Course Associations -------- //
+
 Course.hasMany(CourseMaterial, {
   foreignKey: "courseId",
-  as: "courseMaterials",
+  as: "courseCourseMaterials",
 });
 CourseMaterial.belongsTo(Course, {
   foreignKey: "courseId",
-  as: "course",
+  as: "courseMaterialCourse",
 });
 
-// const FreeResource = require('./FreeResource');
-// const FreeResourceMaterial = require('./FreeResourceMaterial');
-// const Category = require('./Category');
-// const CategoryType = require('./CategoryType');
+// -------- FreeResource Associations -------- //
 
-// Associations
+FreeResource.hasMany(FreeResourceMaterial, {
+  foreignKey: "freeResourceId",
+  as: "freeResourceMaterials",
+});
 FreeResourceMaterial.belongsTo(FreeResource, {
   foreignKey: "freeResourceId",
   as: "materialFreeResource",
-  onDelete: "CASCADE",
-});
-FreeResource.hasMany(FreeResourceMaterial, {
-  foreignKey: "freeResourceId",
-  as: "materialFreeResource",
-});
-
-FreeResourceMaterial.belongsTo(Category, {
-  foreignKey: "categoryId",
-  as: "materialCategory",
-
-  onDelete: "CASCADE",
-});
-Category.hasMany(FreeResourceMaterial, {
-  foreignKey: "categoryId",
-  as: "materialCategory",
-});
-
-FreeResourceMaterial.belongsTo(CategoryType, {
-  foreignKey: "categoryTypeId",
-  as: "materialCategoryType",
-
-  onDelete: "CASCADE",
-});
-CategoryType.hasMany(FreeResourceMaterial, {
-  foreignKey: "categoryTypeId",
-  as: "materialCategoryType",
 });
 
 // ------------------- Exports ------------------- //

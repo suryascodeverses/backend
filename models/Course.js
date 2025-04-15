@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../config/db");
+const CategoryType = require("./CategoryType");
 
 const Course = sequelize.define(
   "Course",
@@ -25,7 +26,11 @@ const Course = sequelize.define(
     
     categoryTypeId: {
       type: DataTypes.UUID,
-      allowNull: true,
+      allowNull: false,
+      references: {
+        model: CategoryType,
+        key: 'id'
+      }
     },
   },
   {

@@ -23,7 +23,7 @@ const Achievement = sequelize.define(
     },
     media: {
       type: DataTypes.JSON, // Store image/video/testimonial info
-      allowNull: true,
+      allowNull: false,
     },
    
   },
