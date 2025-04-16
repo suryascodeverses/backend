@@ -198,40 +198,34 @@ exports.updateFreeResourceMaterial = async (req, res) => {
       type,
       media: url,
     } = req.body;
+    let updatePayload = {
+      title,
+      categoryId,
+      categoryTypeId,
+      freeResourceId,
+    };
 
-    let media = {};
-    if (type === "pdf") {
-      media = {
+    if (type === "pdf" && req.file) {
+      updatePayload.media = {
         name: req.file.originalname,
         path: `${server_url}/uploads${
           req.file.destination.split("uploads")[1]
         }/${req.file.filename}`,
         type: "pdf",
       };
-    } else if (type === "video") {
-      if (!url) {
-        return res.status(400).json({
-          success: false,
-          message: "Media URL is required for video type.",
-        });
-      }
-      media = {
+    }
+
+    if (type === "video" && url) {
+      updatePayload.media = {
         name: "video",
         path: url,
         type: "video",
       };
     }
 
-    const [updated] = await FreeResourceMaterial.update(
-      {
-        title,
-        categoryId,
-        categoryTypeId,
-        freeResourceId,
-        ...(media && { media }),
-      },
-      { where: { id: req.params.id } }
-    );
+    const [updated] = await FreeResourceMaterial.update(updatePayload, {
+      where: { id: req.params.id },
+    });
 
     if (!updated)
       return res.status(404).json({ success: false, message: "Not found" });
