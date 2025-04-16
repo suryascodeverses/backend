@@ -1,6 +1,5 @@
 const { Sequelize } = require("sequelize");
 const { secret } = require("./secret");
-process.env.db_name;
 const sequelize = new Sequelize(
   process.env.db_name,
   process.env.db_user,
@@ -15,9 +14,9 @@ const sequelize = new Sequelize(
 const connectDB = async () => {
   try {
     await sequelize.authenticate();
-    console.log("✅ MySQL connected");
+    console.log("✅  MySQL connected");
   } catch (err) {
-    console.error("❌ DB connection failed:", err.message);
+    console.error("❌  DB connection failed:", err.message);
   }
 };
 

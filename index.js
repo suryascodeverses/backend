@@ -23,7 +23,7 @@ const userRoutes = require("./routes/user.routes");
 // const couponRoutes = require("./routes/coupon.routes");
 // const reviewRoutes = require("./routes/review.routes");
 const adminRoutes = require("./routes/admin.routes");
-const uploadRouter = require("./routes/uploadFile.routes");
+const uploadRouter = require('./routes/uploadFile.routes');
 // const cloudinaryRoutes = require("./routes/cloudinary.routes");
 
 // middleware
@@ -37,11 +37,12 @@ connectDB();
 
 app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
 
+
 app.use("/api/user", userRoutes);
 // app.use("/api/category", categoryRoutes);
 // app.use("/api/brand", brandRoutes);
 // app.use("/api/product", productRoutes);
-app.use("/api/upload", uploadRouter);
+app.use('/api/upload',uploadRouter);
 // app.use("/api/order", orderRoutes);
 // app.use("/api/coupon", couponRoutes);
 // app.use("/api/user-order", userOrderRoutes);
@@ -66,7 +67,7 @@ app.use(
 );
 
 // root route
-// app.get("/", (req, res) => res.send("Apps worked successfully"));
+app.get("/", (req, res) => res.send("Apps worked successfully"));
 // app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
 
 // app.get("/test-image", (req, res) => {
@@ -79,9 +80,9 @@ app.use(
 app.use(express.static(path.join(__dirname, "out")));
 
 // Redirect all other requests to index.html (for routing to work)
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "out", "index.html"));
-});
+//app.get("*", (req, res) => {
+//  res.sendFile(path.join(__dirname, "out", "index.html"));
+//});
 
 (async () => {
   await connectDB();
