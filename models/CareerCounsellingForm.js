@@ -10,9 +10,13 @@ const CareerCounsellingForm = sequelize.define(
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    name: {
+    firstName: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     email: {
       type: DataTypes.STRING,
@@ -31,19 +35,25 @@ const CareerCounsellingForm = sequelize.define(
         },
       },
     },
-    description: {
+    careerGoals: {
       type: DataTypes.TEXT,
       allowNull: true,
     },
+    appointmentDate: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+    },
+    appointmentTime: {
+      type: DataTypes.TIME,
+      allowNull: false,
+    },
     categoryId: {
       type: DataTypes.UUID,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: Category,
         key: "id",
       },
-      allowNull: true,
-
     },
   },
   {

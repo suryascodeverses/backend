@@ -12,7 +12,7 @@ const FreeResource = require("./FreeResource");
 const CourseMaterial = require("./CourseMaterial");
 const CareerCounsellingForm = require("./CareerCounsellingForm");
 const FreeResourceMaterial = require("./FreeResourceMaterials");
-
+const Banner = require("./Banner");
 // ------------------- Associations ------------------- //
 
 // -------- CategoryType Associations -------- //
@@ -165,4 +165,5 @@ module.exports = {
   CareerCounselling,
   CourseMaterial,
   CareerCounsellingForm,
+  Banner,
 };

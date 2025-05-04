@@ -8,6 +8,7 @@
   },
   "scripts": {
     "start": "node index.js",
+    "preview": "set PORT=5001 && node index.js",
     "build": "node index.js",
     "dev": "nodemon index.js",
     "data:import": "node seed.js",

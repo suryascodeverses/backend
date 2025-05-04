@@ -5,19 +5,22 @@ const { CareerCounsellingForm, Category } = require("../models");
 // ✅ Create a new form
 exports.createCareerCounsellingForm = async (req, res) => {
   try {
-    const { name, email, phone, description, categoryId } = req.body;
+    const { firstName, lastName, email, phone, careerGoals, appointmentDate, appointmentTime, categoryId } = req.body;
 
-    if (!name || !email || !phone || !categoryId) {
+    if (!firstName || !email || !phone || !appointmentDate || !appointmentTime) {
       return res
         .status(400)
         .json({ message: "All required fields must be provided." });
     }
 
     const newForm = await CareerCounsellingForm.create({
-      name,
+      firstName,
+      lastName,
       email,
       phone,
-      description,
+      careerGoals,
+      appointmentDate,
+      appointmentTime,
       categoryId,
     });
 

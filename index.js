@@ -56,6 +56,7 @@ app.use("/api/courses", require("./routes/course.routes"));
 app.use("/api/courses-material", require("./routes/courseMaterial.routes"));
 app.use("/api/free-resources", require("./routes/resource.routes"));
 app.use("/api/career-counselling", require("./routes/counselling.routes"));
+app.use("/api/banner", require("./routes/banner.routes"));
 app.use("/api/achievements", require("./routes/achievement.routes"));
 app.use(
   "/api/free-resource-materials",
