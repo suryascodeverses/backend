@@ -25,7 +25,7 @@ const CourseMaterial = sequelize.define(
     // },
     fees: {
       type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
+      allowNull: true,
     },
     media: {
       type: DataTypes.JSON,
